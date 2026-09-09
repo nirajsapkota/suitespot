@@ -8,9 +8,9 @@ import (
 	"github.com/nirajsapkota/suitespot/pkg/spot"
 )
 
-func TestGreaterAcceptsLargerNumber(t *testing.T) {
+func TestGreaterThanAcceptsLargerNumber(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.Greater(stub, uint64(math.MaxUint64), int64(math.MaxInt64)) {
+	if !spot.GreaterThan(stub, uint64(math.MaxUint64), int64(math.MaxInt64)) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -18,9 +18,9 @@ func TestGreaterAcceptsLargerNumber(t *testing.T) {
 	}
 }
 
-func TestGreaterRejectsEqualValues(t *testing.T) {
+func TestGreaterThanRejectsEqualValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Greater(stub, 2, 2) {
+	if spot.GreaterThan(stub, 2, 2) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -28,9 +28,9 @@ func TestGreaterRejectsEqualValues(t *testing.T) {
 	}
 }
 
-func TestGreaterRejectsNaN(t *testing.T) {
+func TestGreaterThanRejectsNaN(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Greater(stub, math.NaN(), 1) {
+	if spot.GreaterThan(stub, math.NaN(), 1) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -38,9 +38,9 @@ func TestGreaterRejectsNaN(t *testing.T) {
 	}
 }
 
-func TestGreaterRejectsUnsupportedTypes(t *testing.T) {
+func TestGreaterThanRejectsUnsupportedTypes(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Greater(stub, []int{2}, []int{1}) {
+	if spot.GreaterThan(stub, []int{2}, []int{1}) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -48,9 +48,9 @@ func TestGreaterRejectsUnsupportedTypes(t *testing.T) {
 	}
 }
 
-func TestGreaterOrEqualAcceptsEqualValues(t *testing.T) {
+func TestGreaterThanOrEqualAcceptsEqualValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.GreaterOrEqual(stub, 2, 2) {
+	if !spot.GreaterThanOrEqual(stub, 2, 2) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -58,9 +58,9 @@ func TestGreaterOrEqualAcceptsEqualValues(t *testing.T) {
 	}
 }
 
-func TestGreaterOrEqualAcceptsGreaterValues(t *testing.T) {
+func TestGreaterThanOrEqualAcceptsGreaterValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.GreaterOrEqual(stub, 3, 2) {
+	if !spot.GreaterThanOrEqual(stub, 3, 2) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -68,9 +68,9 @@ func TestGreaterOrEqualAcceptsGreaterValues(t *testing.T) {
 	}
 }
 
-func TestGreaterOrEqualRejectsSmallerValues(t *testing.T) {
+func TestGreaterThanOrEqualRejectsSmallerValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.GreaterOrEqual(stub, 1, 2) {
+	if spot.GreaterThanOrEqual(stub, 1, 2) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -78,9 +78,9 @@ func TestGreaterOrEqualRejectsSmallerValues(t *testing.T) {
 	}
 }
 
-func TestLessOrEqualAcceptsEqualValues(t *testing.T) {
+func TestLessThanOrEqualAcceptsEqualValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.LessOrEqual(stub, 2, 2) {
+	if !spot.LessThanOrEqual(stub, 2, 2) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -88,9 +88,9 @@ func TestLessOrEqualAcceptsEqualValues(t *testing.T) {
 	}
 }
 
-func TestLessOrEqualAcceptsSmallerValues(t *testing.T) {
+func TestLessThanOrEqualAcceptsSmallerValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.LessOrEqual(stub, 1, 2) {
+	if !spot.LessThanOrEqual(stub, 1, 2) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -98,9 +98,9 @@ func TestLessOrEqualAcceptsSmallerValues(t *testing.T) {
 	}
 }
 
-func TestLessOrEqualRejectsGreaterValues(t *testing.T) {
+func TestLessThanOrEqualRejectsGreaterValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.LessOrEqual(stub, 3, 2) {
+	if spot.LessThanOrEqual(stub, 3, 2) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -108,9 +108,9 @@ func TestLessOrEqualRejectsGreaterValues(t *testing.T) {
 	}
 }
 
-func TestLessAcceptsSmallerNumber(t *testing.T) {
+func TestLessThanAcceptsSmallerNumber(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.Less(stub, 1, 2) {
+	if !spot.LessThan(stub, 1, 2) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -118,9 +118,9 @@ func TestLessAcceptsSmallerNumber(t *testing.T) {
 	}
 }
 
-func TestLessRejectsEqualValues(t *testing.T) {
+func TestLessThanRejectsEqualValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Less(stub, 2, 2) {
+	if spot.LessThan(stub, 2, 2) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -128,12 +128,172 @@ func TestLessRejectsEqualValues(t *testing.T) {
 	}
 }
 
-func TestLessRejectsGreaterValues(t *testing.T) {
+func TestLessThanRejectsGreaterValues(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Less(stub, 3, 2) {
+	if spot.LessThan(stub, 3, 2) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
 		t.Fatalf("failures = %v; want one fatal failure", stub.Failures)
+	}
+}
+
+func TestGreaterThanRejectsStrings(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThan(stub, "b", "a") {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanRejectsNonNumericValues(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThan(stub, struct{}{}, struct{}{}) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanRejectsInfinity(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThan(stub, math.Inf(1), 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanRejectsNil(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThan(stub, nil, 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanOrEqualRejectsStrings(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThanOrEqual(stub, "b", "a") {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanOrEqualRejectsNonNumericValues(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThanOrEqual(stub, struct{}{}, struct{}{}) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanOrEqualRejectsInfinity(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThanOrEqual(stub, math.Inf(1), 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestGreaterThanOrEqualRejectsNil(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.GreaterThanOrEqual(stub, nil, 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanRejectsStrings(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThan(stub, "b", "a") {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanRejectsNonNumericValues(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThan(stub, struct{}{}, struct{}{}) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanRejectsInfinity(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThan(stub, math.Inf(1), 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanRejectsNil(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThan(stub, nil, 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanOrEqualRejectsStrings(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThanOrEqual(stub, "b", "a") {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanOrEqualRejectsNonNumericValues(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThanOrEqual(stub, struct{}{}, struct{}{}) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanOrEqualRejectsInfinity(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThanOrEqual(stub, math.Inf(1), 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
+	}
+}
+
+func TestLessThanOrEqualRejectsNil(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	if spot.LessThanOrEqual(stub, nil, 1) {
+		t.Fatal("expected assertion to fail")
+	}
+	if len(stub.Failures) != 1 {
+		t.Fatalf("expected one fatal failure; got %v", stub.Failures)
 	}
 }

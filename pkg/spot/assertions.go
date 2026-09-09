@@ -31,12 +31,12 @@ func NotNil(t TestingT, value any, message ...any) bool {
 	return check(t, !isNil(value), "expected a non-nil value", message)
 }
 
-func Err(t TestingT, err error, message ...any) bool {
+func Error(t TestingT, err error, message ...any) bool {
 	t.Helper()
 	return check(t, err != nil, "expected an error", message)
 }
 
-func NoErr(t TestingT, err error, message ...any) bool {
+func NoError(t TestingT, err error, message ...any) bool {
 	t.Helper()
 	return check(t, err == nil, fmt.Sprintf("expected no error; got %v", err), message)
 }

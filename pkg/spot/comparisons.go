@@ -7,25 +7,25 @@ import (
 	"reflect"
 )
 
-func Greater(t TestingT, actual, other any, message ...any) bool {
+func GreaterThan(t TestingT, actual, other any, message ...any) bool {
 	t.Helper()
 	comparison, valid := compareNumbers(actual, other)
 	return check(t, valid && comparison > 0, fmt.Sprintf("expected %#v to be greater than %#v", actual, other), message)
 }
 
-func GreaterOrEqual(t TestingT, actual, other any, message ...any) bool {
+func GreaterThanOrEqual(t TestingT, actual, other any, message ...any) bool {
 	t.Helper()
 	comparison, valid := compareNumbers(actual, other)
 	return check(t, valid && comparison >= 0, fmt.Sprintf("expected %#v to be greater than or equal to %#v", actual, other), message)
 }
 
-func Less(t TestingT, actual, other any, message ...any) bool {
+func LessThan(t TestingT, actual, other any, message ...any) bool {
 	t.Helper()
 	comparison, valid := compareNumbers(actual, other)
 	return check(t, valid && comparison < 0, fmt.Sprintf("expected %#v to be less than %#v", actual, other), message)
 }
 
-func LessOrEqual(t TestingT, actual, other any, message ...any) bool {
+func LessThanOrEqual(t TestingT, actual, other any, message ...any) bool {
 	t.Helper()
 	comparison, valid := compareNumbers(actual, other)
 	return check(t, valid && comparison <= 0, fmt.Sprintf("expected %#v to be less than or equal to %#v", actual, other), message)

@@ -14,8 +14,8 @@ func TestGreeting(t *testing.T) {
     spot.False(t, stopped)
     spot.Nil(t, missing)
     spot.NotNil(t, result)
-    spot.Err(t, lookupError)
-    spot.NoErr(t, saveError)
+    spot.Error(t, lookupError)
+    spot.NoError(t, saveError)
     spot.ErrorContains(t, lookupError, "not found")
 }
 ```
@@ -28,7 +28,7 @@ All assertions accept an optional message or format string and arguments:
 
 ```go
 spot.Equal(t, "ready", status, "resource %s", name)
-spot.NoErr(t, err, "could not load configuration")
+spot.NoError(t, err, "could not load configuration")
 ```
 
 ## Helpers
@@ -37,27 +37,48 @@ spot.NoErr(t, err, "could not load configuration")
 | --- | --- |
 | `True`, `False` | Check a boolean |
 | `Nil`, `NotNil` | Check nil, including typed nil pointers, maps, slices, channels, and functions |
-| `Err`, `NoErr` | Check `err != nil` or `err == nil` |
+| `Error`, `NoError` | Check `err != nil` or `err == nil` |
 | `Equal`, `NotEqual` | Deep equality, with matching types |
+| `Contains` | Check a substring, slice/array element, or map key |
+| `ElementsMatch` | Compare slice/array elements without order, including duplicate counts |
 | `ErrorContains` | Require a non-nil error whose message contains a substring |
-| `Greater`, `GreaterOrEqual`, `LessOrEqual`, `Less` | Compare finite numbers |
+| `GreaterThan`, `GreaterThanOrEqual`, `LessThanOrEqual`, `LessThan` | Compare finite numbers |
 
 `Equal` and `NotEqual` take the expected value before the actual value. Ordering
 helpers read left to right:
 
 ```go
-spot.Greater(t, count, 0)
-spot.GreaterOrEqual(t, count, minimum)
-spot.LessOrEqual(t, count, maximum)
-spot.Less(t, count, limit)
+spot.GreaterThan(t, count, 0)
+spot.GreaterThanOrEqual(t, count, minimum)
+spot.LessThanOrEqual(t, count, maximum)
+spot.LessThan(t, count, limit)
 ```
 
 Numeric comparisons preserve integer precision and support mixed numeric types.
 NaN, infinity, and unsupported comparison inputs report assertion failures.
 
-`Nil` and `NoErr` answer different questions. An `error` interface containing a
-typed nil pointer is non-nil: `Nil(t, err)` passes, but `NoErr(t, err)` fails,
+`Nil` and `NoError` answer different questions. An `error` interface containing a
+typed nil pointer is non-nil: `Nil(t, err)` passes, but `NoError(t, err)` fails,
 just like an ordinary `if err != nil` check.
+
+## Collections
+
+```go
+spot.Contains(t, "hello world", "world")
+spot.Contains(t, []string{"hello", "world"}, "world")
+spot.Contains(t, map[string]int{"hello": 1}, "hello") // Checks keys, not values.
+spot.ElementsMatch(t, []int{1, 2, 2}, []int{2, 1, 2})
+```
+
+`Contains` uses substring matching for strings and deep equality for elements and
+map keys. String targets must also be strings. `ElementsMatch` compares each
+element using deep equality, ignores order, and requires duplicate counts to
+match. Neither helper converts numeric types or modifies its inputs.
+
+`ElementsMatch` accepts arrays and slices (including comparisons between them),
+and treats nil as an empty list. Nil and empty slices therefore match. Other
+inputs, including strings and maps, fail even when empty. Unsupported inputs
+report assertion failures rather than panicking.
 
 ## Parallel suites
 

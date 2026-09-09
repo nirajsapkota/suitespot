@@ -152,9 +152,9 @@ func TestNotNilRejectsTypedNil(t *testing.T) {
 	}
 }
 
-func TestErrAcceptsError(t *testing.T) {
+func TestErrorAcceptsError(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.Err(stub, errors.New("failure")) {
+	if !spot.Error(stub, errors.New("failure")) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -162,10 +162,10 @@ func TestErrAcceptsError(t *testing.T) {
 	}
 }
 
-func TestErrAcceptsTypedNilError(t *testing.T) {
+func TestErrorAcceptsTypedNilError(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
 	var err *os.PathError
-	if !spot.Err(stub, err) {
+	if !spot.Error(stub, err) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -173,9 +173,9 @@ func TestErrAcceptsTypedNilError(t *testing.T) {
 	}
 }
 
-func TestErrRejectsNil(t *testing.T) {
+func TestErrorRejectsNil(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.Err(stub, nil) {
+	if spot.Error(stub, nil) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -186,9 +186,9 @@ func TestErrRejectsNil(t *testing.T) {
 	}
 }
 
-func TestNoErrAcceptsNil(t *testing.T) {
+func TestNoErrorAcceptsNil(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if !spot.NoErr(stub, nil) {
+	if !spot.NoError(stub, nil) {
 		t.Fatal("expected assertion to pass")
 	}
 	if len(stub.Failures) != 0 {
@@ -196,9 +196,9 @@ func TestNoErrAcceptsNil(t *testing.T) {
 	}
 }
 
-func TestNoErrRejectsError(t *testing.T) {
+func TestNoErrorRejectsError(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
-	if spot.NoErr(stub, errors.New("failure")) {
+	if spot.NoError(stub, errors.New("failure")) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {
@@ -209,10 +209,10 @@ func TestNoErrRejectsError(t *testing.T) {
 	}
 }
 
-func TestNoErrRejectsTypedNilError(t *testing.T) {
+func TestNoErrorRejectsTypedNilError(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
 	var err *os.PathError
-	if spot.NoErr(stub, err) {
+	if spot.NoError(stub, err) {
 		t.Fatal("expected assertion to fail")
 	}
 	if len(stub.Failures) != 1 {

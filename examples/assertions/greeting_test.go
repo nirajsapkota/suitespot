@@ -27,9 +27,9 @@ func (s *GreetingSuite) TestGreeting(t *testing.T) {
 func (s *GreetingSuite) TestErrors(t *testing.T) {
 	missing := errors.New("missing greeting")
 	err := fmt.Errorf("lookup: %w", missing)
-	spot.Err(t, err)
+	spot.Error(t, err)
 	spot.ErrorContains(t, err, "missing greeting")
-	spot.NoErr(t, nil)
+	spot.NoError(t, nil)
 }
 
 func (s *GreetingSuite) TestPointers(t *testing.T) {
@@ -44,8 +44,8 @@ func TestGreetingSuite(t *testing.T) {
 }
 
 func TestOrdering(t *testing.T) {
-	spot.Greater(t, 3, 2)
-	spot.GreaterOrEqual(t, 3, 3)
-	spot.LessOrEqual(t, 2, 2)
-	spot.Less(t, 2, 3)
+	spot.GreaterThan(t, 3, 2)
+	spot.GreaterThanOrEqual(t, 3, 3)
+	spot.LessThanOrEqual(t, 2, 2)
+	spot.LessThan(t, 2, 3)
 }
