@@ -126,3 +126,23 @@ go test -v -race -parallel 8 ./examples/parallel_parallel
 The `-parallel` flag limits active parallel tests within each test binary. Suites
 in different packages can also run concurrently; see [running tests](running-tests.md)
 for package-level limits and test selection.
+
+## Shared state and parallel safety
+
+All test methods use the **same suite instance**. `suite.RunParallel` runs test
+methods concurrently, including their `SetupTest` calls. It does not copy the
+suite or prevent writes.
+
+Treat the fixture as read-only after `SetupSuite` when running parallel tests.
+Assigning suite fields in `SetupTest` or a test method can race with another
+test reading or writing them. This also applies to data held through maps,
+slices, and pointers, even when the field itself is never reassigned.
+
+Keep mutable state local to each test, give tests separate resources, or
+synchronize shared access. A lock can prevent a data race, but tests must still
+avoid changing state that another test expects to remain unchanged. If tests
+need to reset and mutate the shared fixture, use `suite.Run`.
+
+Calling `t.Parallel()` in separate suite entry points does not by itself make
+their test methods parallel. Separate suite instances can still share external
+resources, which need the same care. The examples above show each execution mode.

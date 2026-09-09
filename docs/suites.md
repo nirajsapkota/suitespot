@@ -19,7 +19,7 @@ package examples_test
 import (
 	"testing"
 
-	suite "github.com/nirajsapkota/suitespot"
+	"github.com/nirajsapkota/suitespot/pkg/suite"
 )
 
 func TestGreetingSuite(t *testing.T) {

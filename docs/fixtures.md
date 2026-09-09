@@ -2,6 +2,24 @@
 
 [SuiteSpot](../README.md)
 
+## Choosing a setup hook
+
+Use **`SetupSuite`** for the fixture shared by all test methods: configuration,
+seed data, or a shared service. It runs once per suite execution, before any test
+methods start. This hook is required, but can be empty.
+
+Use **`SetupTest`** when each test needs preparation of its own. It runs before
+each selected test method and is optional. With sequential tests (`suite.Run`),
+it can reset suite fields so every test starts from a known state. With parallel
+tests, use it to prepare separate resources for each test, rather than resetting
+shared fields.
+
+Register cleanup with the hook's `t.Cleanup`: cleanup in `SetupSuite` runs after
+the suite's tests finish; cleanup in `SetupTest` runs after that test finishes.
+The example below uses both hooks to prepare separate test directories.
+
+## Example
+
 Put this complete suite in `workspace_test.go`. It uses the sequential entry
 point; change only `TestWorkspaceSuite` to select one of the other
 [execution modes](parallelism.md).
@@ -14,7 +32,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	suite "github.com/nirajsapkota/suitespot"
+	"github.com/nirajsapkota/suitespot/pkg/suite"
 )
 
 func TestWorkspaceSuite(t *testing.T) {
@@ -93,10 +111,8 @@ Both return nothing. A skip or fatal failure in `SetupSuite` prevents the suite'
 tests from running; in `SetupTest`, it prevents that test's body from running.
 Nested subtests that you create yourself do not get additional `SetupTest` calls.
 
-All methods use the same suite instance. With parallel tests, `SetupTest` must
-not reset shared fields such as `s.currentRequest` for each test: another test
-could be using them. Use test-local state, distinct resources as above, or
-synchronize shared mutable state.
+All methods use the same suite instance. See [shared state and parallel
+safety](parallelism.md#shared-state-and-parallel-safety) before using parallel tests.
 
 See the [complete workspace example](../examples/sequential_sequential/workspace_test.go)
 and [how to select individual tests](running-tests.md).

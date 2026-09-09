@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	suite "github.com/nirajsapkota/suitespot"
-	"github.com/nirajsapkota/suitespot/mocks"
+	"github.com/nirajsapkota/suitespot/internal/mocks"
+	"github.com/nirajsapkota/suitespot/pkg/suite"
 )
 
 func TestRunNoSuitesFails(t *testing.T) {

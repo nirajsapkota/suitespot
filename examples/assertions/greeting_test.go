@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	suite "github.com/nirajsapkota/suitespot"
-	"github.com/nirajsapkota/suitespot/spot"
+	"github.com/nirajsapkota/suitespot/pkg/spot"
+	"github.com/nirajsapkota/suitespot/pkg/suite"
 )
 
 type GreetingSuite struct {

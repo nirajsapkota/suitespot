@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	suite "github.com/nirajsapkota/suitespot"
+	"github.com/nirajsapkota/suitespot/pkg/suite"
 )
 
 func TestWorkspaceSuite(t *testing.T) {

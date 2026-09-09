@@ -33,12 +33,12 @@ that suite would be excluded by `-run`.
 `*testing.T` satisfies it, so callers still write `suite.Run(t, &GreetingSuite{})`.
 Validation failures call `Fatal` automatically; callers have no error to check.
 
-The library's [tests](../suite_test.go) pass a stub that records `Fatal` calls to
+The library's [tests](../pkg/suite/suite_test.go) pass a stub that records `Fatal` calls to
 assert validation failures directly. The runner stops after reporting a failure,
 even when the stub's `Fatal` returns. Setup hooks and test methods still receive
 real `*testing.T` values, so their assertions and parallel scheduling use Go's
 standard test runner.
 
-The suite runner implementation remains in [suite.go](../suite.go).
+The suite runner implementation remains in [suite.go](../pkg/suite/suite.go).
 
 See [creating suites](suites.md) and the [four execution modes](parallelism.md).

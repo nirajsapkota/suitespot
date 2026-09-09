@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/nirajsapkota/suitespot/mocks"
-	"github.com/nirajsapkota/suitespot/spot"
+	"github.com/nirajsapkota/suitespot/internal/mocks"
+	"github.com/nirajsapkota/suitespot/pkg/spot"
 )
 
 func TestTrueAcceptsTrue(t *testing.T) {

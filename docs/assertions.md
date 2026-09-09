@@ -2,7 +2,7 @@
 
 [SuiteSpot](../README.md)
 
-Import `github.com/nirajsapkota/suitespot/spot`. Every assertion receives its test
+Import `github.com/nirajsapkota/suitespot/pkg/spot`. Every assertion receives its test
 as the first argument. There is no assertion object or stored suite test pointer,
 and the package has no external dependencies.
 
