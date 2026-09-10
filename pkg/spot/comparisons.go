@@ -7,6 +7,17 @@ import (
 	"reflect"
 )
 
+// EqualValues checks deep equality, then exact numeric equality across numeric
+// Go types. NaN is never equal; infinities are equal when their signs match.
+func EqualValues(t TestingT, expected, actual any, message ...any) bool {
+	t.Helper()
+	equal := reflect.DeepEqual(expected, actual)
+	if !equal {
+		equal, _ = equalNumbers(expected, actual)
+	}
+	return check(t, equal, fmt.Sprintf("expected %#v; got %#v", expected, actual), message)
+}
+
 func GreaterThan(t TestingT, actual, other any, message ...any) bool {
 	t.Helper()
 	comparison, valid := compareNumbers(actual, other)
@@ -38,6 +49,39 @@ func compareNumbers(left, right any) (int, bool) {
 		return 0, false
 	}
 	return a.Cmp(b), true
+}
+
+func equalNumbers(left, right any) (bool, bool) {
+	comparison, valid := compareNumbers(left, right)
+	if valid {
+		return comparison == 0, true
+	}
+	leftInfinity, leftNumeric := infinity(left)
+	rightInfinity, rightNumeric := infinity(right)
+	if leftNumeric && rightNumeric {
+		return leftInfinity != 0 && leftInfinity == rightInfinity, true
+	}
+	return false, leftNumeric && rightNumeric
+}
+
+func infinity(value any) (int, bool) {
+	actual := reflect.ValueOf(value)
+	switch actual.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return 0, true
+	case reflect.Float32, reflect.Float64:
+		number := actual.Float()
+		if math.IsInf(number, 1) {
+			return 1, true
+		}
+		if math.IsInf(number, -1) {
+			return -1, true
+		}
+		return 0, true
+	default:
+		return 0, false
+	}
 }
 
 func number(value any) (*big.Rat, bool) {

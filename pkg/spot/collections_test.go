@@ -124,6 +124,105 @@ func TestContainsUnsupported(t *testing.T) {
 	requireCollectionFailure(t, stub, passed)
 }
 
+func TestNotContains(t *testing.T) {
+	type namedString string
+	cases := []struct {
+		name      string
+		container any
+		element   any
+		passes    bool
+	}{
+		{name: "missing substring", container: "hello", element: "world", passes: true},
+		{name: "present substring", container: "hello", element: "ell", passes: false},
+		{name: "named strings", container: namedString("hello"), element: namedString("world"), passes: true},
+		{name: "missing slice element", container: []int{1, 2}, element: 3, passes: true},
+		{name: "present slice element", container: []int{1, 2}, element: 2, passes: false},
+		{name: "missing array element", container: [2]int{1, 2}, element: 3, passes: true},
+		{name: "present array element", container: [2]int{1, 2}, element: 1, passes: false},
+		{name: "missing map key", container: map[string]int{"one": 1}, element: "two", passes: true},
+		{name: "present map key", container: map[string]int{"one": 1}, element: "one", passes: false},
+		{name: "map value is not a key", container: map[string]int{"one": 1}, element: 1, passes: true},
+		{name: "nil slice", container: []int(nil), element: 1, passes: true},
+		{name: "unsupported container", container: 1, element: 1, passes: false},
+		{name: "invalid string target", container: "hello", element: 1, passes: false},
+	}
+
+	for _, test := range cases {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			stub := &mocks.TestingT{T: t}
+			passed := spot.NotContains(stub, test.container, test.element)
+			if test.passes {
+				requireCollectionPass(t, stub, passed)
+				return
+			}
+			requireCollectionFailure(t, stub, passed)
+		})
+	}
+}
+
+func TestLen(t *testing.T) {
+	type namedString string
+	text := namedString("spot")
+	items := []int{1, 2, 3}
+	var nilPointer *string
+	channel := make(chan int, 2)
+	channel <- 1
+	cases := []struct {
+		name     string
+		value    any
+		expected int
+		passes   bool
+	}{
+		{name: "string", value: "spot", expected: 4, passes: true},
+		{name: "named string", value: namedString("spot"), expected: 4, passes: true},
+		{name: "array", value: [2]int{1, 2}, expected: 2, passes: true},
+		{name: "slice", value: items, expected: 3, passes: true},
+		{name: "nil slice", value: []int(nil), expected: 0, passes: true},
+		{name: "map", value: map[string]int{"one": 1}, expected: 1, passes: true},
+		{name: "channel", value: channel, expected: 1, passes: true},
+		{name: "pointer to string", value: &text, expected: 4, passes: true},
+		{name: "pointer to slice", value: &items, expected: 3, passes: true},
+		{name: "wrong length", value: "spot", expected: 3, passes: false},
+		{name: "nil", value: nil, expected: 0, passes: false},
+		{name: "typed nil pointer", value: nilPointer, expected: 0, passes: false},
+		{name: "scalar", value: 4, expected: 0, passes: false},
+	}
+
+	for _, test := range cases {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			stub := &mocks.TestingT{T: t}
+			passed := spot.Len(stub, test.value, test.expected)
+			if test.passes {
+				requireCollectionPass(t, stub, passed)
+				return
+			}
+			requireCollectionFailure(t, stub, passed)
+		})
+	}
+}
+
+func TestLenReportsExpectedAndActualLengths(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	spot.Len(stub, []int{1, 2}, 3, "items for %s", "record")
+	if len(stub.Failures) != 1 || !strings.Contains(stub.Failures[0], "expected length 3; got 2") {
+		t.Fatalf("unexpected diagnostic: %v", stub.Failures)
+	}
+	if !strings.HasSuffix(stub.Failures[0], ": items for record") {
+		t.Fatalf("missing custom message: %v", stub.Failures)
+	}
+}
+
+func TestNotContainsIncludesFormattedMessage(t *testing.T) {
+	stub := &mocks.TestingT{T: t}
+	passed := spot.NotContains(stub, []int{1}, 1, "record %d", 7)
+	requireCollectionFailure(t, stub, passed)
+	if !strings.HasSuffix(stub.Failures[0], ": record 7") {
+		t.Fatalf("missing custom message: %v", stub.Failures)
+	}
+}
+
 func TestElementsMatchReordered(t *testing.T) {
 	stub := &mocks.TestingT{T: t}
 	passed := spot.ElementsMatch(stub, []int{1, 2, 3}, []int{3, 1, 2})
